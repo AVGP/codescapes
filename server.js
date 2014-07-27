@@ -5,6 +5,7 @@ var express      = require('express'),
     DockerRunner = require('docker-exec');
 
 var app = express();
+app.enable('trust proxy');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyparser.urlencoded({ extended: false }));
 
@@ -12,21 +13,21 @@ app.post("/analyse", function(req, res) {
     var path     = urlParser.parse(req.param('url')).pathname,
         parts    = path.split('/'),
         userName = parts[parts.length - 2],
-        repoName = parts[parts.length - 1];
+        repoName = parts[parts.length - 1],
+	cloneDir = userName + "_" + repoName;
         
     if(repoName.indexOf('.') > 0) repoName = repoName.slice(0, repoName.lastIndexOf('.'));
 
     var ds = new DockerRunner();
     ds.start({Image: "codescape-worker", Volumes: { "/repo": {}}, Binds: [ __dirname + "/public/repos:/repo:rw" ]}).then(function (stream) {
 	stream.pipe(process.stdout);
-	var cloneDir = userName + "_" + repoName;
 	console.log("Cloning into ", cloneDir);
         return ds.run("git clone " + req.param("url") + " " + cloneDir + " && cd /tmp/" + cloneDir + " && cloc --report-file report.cloc --csv --by-file . && cloc2json report.cloc > /repo/" + cloneDir + ".json");
     }).then(function() {
 	console.log("Stopping container..");
         return ds.stop();
     }).then(function() {
-        res.send("Done");
+        res.redirect("/index.html#" + cloneDir + ".json");
     }).catch(function(e) { console.log("ERROR:", e); });
 });
 
