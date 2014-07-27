@@ -46,8 +46,11 @@ window.addEventListener('keydown', function(e) {
 	}
 });
 
-$.getJSON("repos/" + window.location.hash.slice(1), initGrid);
-console.log(window.location.hash.slice(1));
+if(window.location.hash) {
+	document.getElementById("analyse").style.display = "none";
+	$.getJSON("repos/" + window.location.hash.slice(1), initGrid);
+	console.log(window.location.hash.slice(1));
+}
 
 function initGrid(theGrid) {
 	console.log("INIT", theGrid.length, theGrid[0]);
