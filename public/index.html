@@ -11,9 +11,6 @@
             
             canvas { width: 100%; height: 100% }
         </style>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.min.js"></script>
-        <script src="color-scheme.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
     </head>
     <body>
 	<form id="analyse" action="/analyse" method="post">
@@ -22,8 +19,11 @@
 	    <button type="submit">Visualise!</button>
 	</form>
 	<p>
-	    Move with W/A/S/D, turn camera with arrow up / arrow down.
+	    Move with W/A/S/D, turn camera with arrow up / arrow down. A block = a file in the repository. Height of the block = number of lines in the file.
 	</p>
+        <script src="lib/three.min.js"></script>
+        <script src="lib/color-scheme.min.js"></script>
+        <script src="lib/zepto.min.js"></script>
         <script src="app.js"></script>
     </body>
 </html>
