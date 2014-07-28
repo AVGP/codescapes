@@ -20,7 +20,7 @@ window.addEventListener('click', function(e) {
 	var raycaster = projector.pickingRay( mouse.clone(), camera ),
 		pick      =	raycaster.intersectObjects(anchorMesh.children);
 
-	if(pick && pick[0]) alert(pick[0].object.data.name);	
+	if(pick && pick[0]) alert(pick[0].object.data.name + " contains " + pick[0].object.data.lines + " lines");	
 });
 
 window.addEventListener('keydown', function(e) {
