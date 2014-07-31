@@ -2,12 +2,29 @@ var express      = require('express'),
     bodyparser   = require('body-parser'),
     urlParser    = require('url'),
     exec         = require('child_process').exec,
-    DockerRunner = require('docker-exec');
+    DockerRunner = require('docker-exec'),
+    fs           = require('fs');
 
 var app = express();
 app.enable('trust proxy');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyparser.urlencoded({ extended: false }));
+
+app.get("/gallery.json", function(req, res) {
+    res.setHeader("Content-Type", "application/json");
+    fs.readdir(__dirname + "/public/repos", function(err, files) {
+        if (err) {
+            res.send(JSON.stringify({error: err}));
+            return;
+        }
+
+        files = files.filter(function (file) {
+            return fs.statSync(__dirname + "/public/repos/" + file).isFile();
+        });
+
+        res.send(JSON.stringify(files));
+    });
+});
 
 app.post("/analyse", function(req, res) { 
     var path     = urlParser.parse(req.param('url')).pathname,
