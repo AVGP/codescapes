@@ -6,7 +6,7 @@
   "dependencies": {
     "body-parser": "^1.5.0",
     "express": "^4.6.1",
-    "docker-exec": "https://github.com/AVGP/docker-exec.git#start-options"
+    "docker-exec": "0.2.1"
   },
   "devDependencies": {},
   "scripts": {
